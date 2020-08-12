@@ -2,7 +2,7 @@ from .error import ValidateError
 from .error import ImplementationError
 
 
-class MatcherBase(object):
+class BelieveBase(object):
     def __init__(self, *args, **kwargs):
         self.init_arg_str(*args, **kwargs)
         self.initialize(*args, **kwargs)

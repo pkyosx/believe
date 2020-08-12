@@ -1,7 +1,7 @@
-from .internal import MatcherBase
+from .internal import BelieveBase
 
 
-class Nullable(MatcherBase):
+class Nullable(BelieveBase):
     def initialize(self, obj):
         self.obj = obj
 
@@ -12,7 +12,7 @@ class Nullable(MatcherBase):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_param")
 
 
-class Not(MatcherBase):
+class Not(BelieveBase):
     def initialize(self, obj):
         self.obj = obj
 
@@ -21,7 +21,7 @@ class Not(MatcherBase):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_param")
 
 
-class Any(MatcherBase):
+class Any(BelieveBase):
     def initialize(self, *type_classes):
         self.type_classes = type_classes
         self.init_arg_str(*[i.__name__ for i in type_classes])

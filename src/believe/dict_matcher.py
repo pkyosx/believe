@@ -1,8 +1,8 @@
-from .internal import MatcherBase
+from .internal import BelieveBase
 from .internal import validate
 
 
-class Dict(MatcherBase):
+class Dict(BelieveBase):
     def initialize(self, dict_obj):
         self.dict_obj = dict_obj
         assert isinstance(dict_obj, dict)
@@ -24,7 +24,7 @@ class Dict(MatcherBase):
             else:
                 self.raise_validate_error(rhs, e_path=e_path, e_msg="unknown_field", e_unsafe_msg=f'unknown_field: {k}')
 
-class DictOf(MatcherBase):
+class DictOf(BelieveBase):
     def initialize(self, key, value, n_item=None, min_item=None, max_item=None):
         self.key = key
         self.value = value
@@ -48,7 +48,7 @@ class DictOf(MatcherBase):
             validate(self.key, k, "%s.%s" % (e_path, k))
             validate(self.value, v, "%s.%s" % (e_path, k))
 
-class Optional(MatcherBase):
+class Optional(BelieveBase):
     def initialize(self, value):
         self.value = value
 

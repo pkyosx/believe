@@ -1,7 +1,7 @@
 from .error import ValidateError
 from .error import ImplementationError
 
-from .internal import MatcherBase
+from .internal import BelieveBase
 from .internal import validate
 
 from .dict_matcher import Dict
@@ -29,7 +29,7 @@ from .str_matcher import AnySHA1
 class BelieveMixin(object): pass
 for c, cls in dict(locals()).items():
     try:
-        if issubclass(cls, MatcherBase) and cls != MatcherBase:
+        if issubclass(cls, BelieveBase) and cls != BelieveBase:
             setattr(BelieveMixin, c, cls)
     except TypeError:
         pass

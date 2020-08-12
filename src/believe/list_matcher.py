@@ -1,8 +1,8 @@
-from .internal import MatcherBase
+from .internal import BelieveBase
 from .internal import validate
 
 
-class OneOf(MatcherBase):
+class OneOf(BelieveBase):
     def initialize(self, *candidates):
         self.candidates = candidates
 
@@ -13,7 +13,7 @@ class OneOf(MatcherBase):
         self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_argument")
 
 
-class AnyOrder(MatcherBase):
+class AnyOrder(BelieveBase):
     def initialize(self, list_obj):
         assert isinstance(list_obj, list)
 
@@ -29,7 +29,7 @@ class AnyOrder(MatcherBase):
             list_obj.remove(i)
 
 
-class ListOf(MatcherBase):
+class ListOf(BelieveBase):
     def initialize(self, one_item, n_item=None, min_item=None, max_item=None):
         self.one_item = one_item
         self.n_item = n_item

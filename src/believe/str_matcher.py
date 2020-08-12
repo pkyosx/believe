@@ -1,9 +1,9 @@
 import uuid
 
-from .internal import MatcherBase
+from .internal import BelieveBase
 
 
-class AnyStr(MatcherBase):
+class AnyStr(BelieveBase):
     def initialize(self, min_len=None, max_len=None):
         self.min_len = min_len
         self.max_len = max_len
@@ -17,7 +17,7 @@ class AnyStr(MatcherBase):
             self.raise_validate_error(rhs, e_path=e_path, e_msg=f'string_too_long: {len(rhs)} > {self.max_len}')
 
 
-class AnyIntStr(MatcherBase):
+class AnyIntStr(BelieveBase):
     def initialize(self):
         pass
 
@@ -31,7 +31,7 @@ class AnyIntStr(MatcherBase):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="not_int_string")
 
 
-class AnyUUID(MatcherBase):
+class AnyUUID(BelieveBase):
     def initialize(self):
         pass
 
@@ -44,7 +44,7 @@ class AnyUUID(MatcherBase):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_uuid")
 
 
-class AnyIPV4(MatcherBase):
+class AnyIPV4(BelieveBase):
     def initialize(self):
         pass
 
@@ -63,7 +63,7 @@ class AnyIPV4(MatcherBase):
                 self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_ipv4")
 
 
-class AnySHA1(MatcherBase):
+class AnySHA1(BelieveBase):
     def initialize(self):
         pass
 

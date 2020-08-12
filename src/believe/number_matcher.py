@@ -1,7 +1,7 @@
-from .internal import MatcherBase
+from .internal import BelieveBase
 
 
-class Almost(MatcherBase):
+class Almost(BelieveBase):
     def initialize(self, ts, ts_range=3):
         assert isinstance(ts, (int, float))
         assert isinstance(ts_range, (int, float))
@@ -16,7 +16,7 @@ class Almost(MatcherBase):
             self.raise_validate_error(rhs, e_path=e_path, e_msg=f'not_in_range')
 
 
-class AnyInt(MatcherBase):
+class AnyInt(BelieveBase):
     def initialize(self, min_value=None, max_value=None):
         assert min_value is None or isinstance(min_value, int)
         assert max_value is None or isinstance(max_value, int)
