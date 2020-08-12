@@ -24,7 +24,7 @@ if __name__ == '__main__':
             "License :: OSI Approved :: MIT License",
             "Operating System :: OS Independent"
         ],  # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-        python_requires='>=3.0',
+        python_requires='>=3.6',
         keywords=['json', 'validate', 'validator'],
         author='Seth Wang',
         author_email='pkyosx@gmail.com',
