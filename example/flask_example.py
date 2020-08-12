@@ -1,5 +1,7 @@
-from flask import Flask, request, current_app, jsonify
 import believe as B
+
+from flask import Flask, request, current_app, jsonify
+
 app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
@@ -12,6 +14,7 @@ def hello_believe():
         json_validator.validate(content)
     except B.ValidateError as e:
         current_app.logger.error(str(e))
+        # xss_safe_message won't echo request content to prevent xss via error message
         return jsonify(message=e.xss_safe_message()), 400
     return jsonify(f'{content["user_name"]} welcome back!')
 

@@ -46,6 +46,18 @@ validator = B.Dict({"name": B.AnyInt()})
 B.validate(validator, {"name": "ken"})  # believe.error.ValidateError: [e_path=$.name] 'ken' != AnyInt()
 ```
 
+# Common Usage (Unit test comparison)
+Use BelieveMixin on your test case to enable flexible comparison.
+```
+import unittest
+from believe import BelieveMixin
+
+class BelieveTestCase(unittest.TestCase, BelieveMixin):
+	def test_believe(self):
+		self.assertEquals(self.AnyStr(), "abc")
+		self.assertEquals(self.AnyIntStr(), "1")
+```
+
 # Advance Usage (flask)
 Save following code as flask_example.py
 ```
@@ -65,6 +77,7 @@ def hello_believe():
         json_validator.validate(content)
     except B.ValidateError as e:
         current_app.logger.error(str(e))
+        # xss_safe_message won't echo request content to prevent xss via error message
         return jsonify(message=e.xss_safe_message()), 400
     return jsonify(f'{content["user_name"]} welcome back!')
 
