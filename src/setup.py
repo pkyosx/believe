@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 try:
     version = os.environ['VERSION']
 except:
-    version = '1.0.3'
+    version = '1.0.4'
 
 # read the contents of your README file
 this_directory = os.path.abspath(os.path.dirname(__file__))
