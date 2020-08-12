@@ -1,4 +1,3 @@
-from .mixin import BelieveMixin
 from .error import ValidateError
 from .error import ImplementationError
 
@@ -25,3 +24,12 @@ from .str_matcher import AnyIntStr
 from .str_matcher import AnyUUID
 from .str_matcher import AnyIPV4
 from .str_matcher import AnySHA1
+
+# Put all Matcher into BelieveMixin
+class BelieveMixin(object): pass
+for c, cls in dict(locals()).items():
+    try:
+        if issubclass(cls, MatcherBase) and cls != MatcherBase:
+            setattr(BelieveMixin, c, cls)
+    except TypeError:
+        pass
