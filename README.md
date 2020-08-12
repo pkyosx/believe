@@ -1,6 +1,11 @@
 # Believe
 A python package for json validation. Useful for unit test or data validation for restful json body.
 
+# Installation
+```
+pip install believe
+```
+
 # Sample usage
 ```
 import believe as B
@@ -11,6 +16,7 @@ assert B.AnyStr() == "any_str"
 assert B.AnyIntStr() == "123"
 assert B.AnyUUID() == "732c0743-2638-47d5-902d-0daa3080348b"
 assert B.AnySHA1() == "b130c4b97d0640eaf3f45f7360a5b4dbbf561f58"
+assert B.AnyIPV4() == "1.2.3.4"
 
 # Number Match
 assert B.AnyInt(min_value=1) == 1 # X >= 1
@@ -38,4 +44,45 @@ assert B.Not(B.OneOf("A")) == "B"
 # validate with error exception
 validator = B.Dict({"name": B.AnyInt()})
 B.validate(validator, {"name": "ken"})  # believe.error.ValidateError: [e_path=$.name] 'ken' != AnyInt()
+```
+
+# Advance Usage (flask)
+Save following code as flask_example.py
+```
+import believe as B
+
+from flask import Flask, request, current_app, jsonify
+
+app = Flask(__name__)
+
+@app.route('/', methods=['POST'])
+def hello_believe():
+    content = request.get_json()
+    json_validator = B.Dict({
+        "user_name": B.AnyStr(min_len=1, max_len=32),
+    })
+    try:
+        json_validator.validate(content)
+    except B.ValidateError as e:
+        current_app.logger.error(str(e))
+        return jsonify(message=e.xss_safe_message()), 400
+    return jsonify(f'{content["user_name"]} welcome back!')
+
+app.run(debug=1, host='0.0.0.0', port=80)
+```
+
+Install and run sample
+```
+$> pip install flask
+$> python flask_example.py
+```
+
+Test with invalid value
+```
+$> curl localhost -X POST -d '{"user_name": ""}' -H 'content-type: application/json'
+```
+
+Test with valid value
+```
+$> curl localhost -X POST -d '{"user_name": "123"}' -H 'content-type: application/json'
 ```
