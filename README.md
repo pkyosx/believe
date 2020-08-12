@@ -30,6 +30,11 @@ assert B.Dict({"name": B.AnyStr(), "value": B.Optional(B.AnyStr())}) == {"name":
 assert B.DictOf(B.AnyUUID(), B.OneOf("ok", "fail")) == {"732c0743-2638-47d5-902d-0daa3080348b": "ok",
                                                         "5cfd50ba-c3d3-4fb7-b2fe-e9a6e039ad29": "fail"}
 
+# Other Match
+assert B.Nullable(B.AnyStr()) == None # Allow None
+assert B.Any(bytes) == b'123' # only check type
+assert B.Not(B.OneOf("A")) == "B"
+
 # validate with error exception
 validator = B.Dict({"name": B.AnyInt()})
 B.validate(validator, {"name": "ken"})  # believe.error.ValidateError: [e_path=$.name] 'ken' != AnyInt()
