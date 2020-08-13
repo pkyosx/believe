@@ -34,4 +34,4 @@ for c, cls in dict(locals()).items():
     except TypeError:
         pass
 
-__version__ = "1.0.6"
+__version__ = "1.0.7"
