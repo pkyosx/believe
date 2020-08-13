@@ -33,3 +33,5 @@ for c, cls in dict(locals()).items():
             setattr(BelieveMixin, c, cls)
     except TypeError:
         pass
+
+__version__ = "1.0.6"
