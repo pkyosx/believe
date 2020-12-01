@@ -22,6 +22,7 @@ assert B.AnyIPV4() == "1.2.3.4"
 assert B.AnyInt(min_value=1) == 1 # X >= 1
 assert B.AnyInt(max_value=10) == 10 # X <= 10
 assert B.AnyInt(min_value=1, max_value=10) == 5 # 1 <= X <= 10
+assert B.AnyFloat(min_value=1.0, max_value=10.0) == 5.0 # 1.0 <= X <= 10.0
 assert B.Almost(time.time()) == time.time() # Allow some time gap
 
 # List Match
