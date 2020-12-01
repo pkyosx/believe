@@ -14,6 +14,7 @@ from .list_matcher import ListOf
 
 from .number_matcher import Almost
 from .number_matcher import AnyInt
+from .number_matcher import AnyFloat
 
 from .other_matcher import Nullable
 from .other_matcher import Not
@@ -34,4 +35,4 @@ for c, cls in dict(locals()).items():
     except TypeError:
         pass
 
-__version__ = "1.0.7"
+__version__ = "1.0.8"

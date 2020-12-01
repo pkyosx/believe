@@ -60,6 +60,25 @@ class BelieveTestCase(unittest.TestCase, BelieveMixin):
         self.fail_validate_with(3, self.AnyInt(min_value=1, max_value=2),
                                 "[e_msg=value_too_large: 3 > 2] 3 != AnyInt(min_value=1, max_value=2)",
                                 "[e_msg=value_too_large: 3 > 2]")
+        self.fail_validate_with(0, self.AnyInt(min_value=1, max_value=2),
+                                "[e_msg=value_too_small: 0 < 1] 0 != AnyInt(min_value=1, max_value=2)",
+                                "[e_msg=value_too_small: 0 < 1]")
+
+    def test_number_matcher__AnyFloat(self):
+        self.assertEqual("AnyFloat(min_value=1.0, max_value=2.0)", str(self.AnyFloat(min_value=1.0, max_value=2.0)))
+        self.assertEqual(1.0, self.AnyFloat(min_value=1.0, max_value=2.0))
+        self.assertEqual(2.0, self.AnyFloat(min_value=1.0, max_value=2.0))
+        self.assertNotEqual(0.0, self.AnyFloat(min_value=1.0, max_value=2.0))
+        self.assertNotEqual(3.0, self.AnyFloat(min_value=1.0, max_value=2.0))
+        self.assertNotEqual(None, self.AnyFloat(min_value=1.0, max_value=2.0))
+        self.assertNotEqual("None", self.AnyFloat(min_value=1.0, max_value=2.0))
+
+        self.fail_validate_with(3.0, self.AnyFloat(min_value=1.0, max_value=2.0),
+                                "[e_msg=value_too_large: 3.0 > 2.0] 3.0 != AnyFloat(min_value=1.0, max_value=2.0)",
+                                "[e_msg=value_too_large: 3.0 > 2.0]")
+        self.fail_validate_with(0.0, self.AnyFloat(min_value=1.0, max_value=2.0),
+                                "[e_msg=value_too_small: 0.0 < 1.0] 0.0 != AnyFloat(min_value=1.0, max_value=2.0)",
+                                "[e_msg=value_too_small: 0.0 < 1.0]")
 
     def test_str_matcher__AnyIPV4(self):
         self.assertEqual("AnyIPV4()", str(self.AnyIPV4()))
