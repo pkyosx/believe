@@ -1,6 +1,6 @@
-pip install setuptools wheel twine
+pip3 install setuptools wheel twine
 pushd src
 rm -rf dist/
-python setup.py sdist bdist_wheel
-python -m twine upload dist/*
+python3 setup.py sdist bdist_wheel
+python3 -m twine upload dist/*
 popd
