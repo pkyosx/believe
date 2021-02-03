@@ -5,6 +5,7 @@ from .internal import BelieveBase
 from .internal import validate
 
 from .dict_matcher import Dict
+from .dict_matcher import DictStr
 from .dict_matcher import DictOf
 from .dict_matcher import Optional
 

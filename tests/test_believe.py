@@ -235,6 +235,42 @@ class BelieveTestCase(unittest.TestCase, BelieveMixin):
                                 "[e_path=$.req1] {} != {'req11': 1}",
                                 "[e_path=$.req1]")
 
+    def test_dict_matcher__DictStr(self):
+        exp_dict = self.DictStr({"req1": 1,
+                                 "req2": 2,
+                                 "opt1": self.Optional(1),
+                                 "opt2": self.Optional(2)})
+
+        self.assertEqual("DictStr({'req1': 1, 'req2': 2, 'opt1': Optional(1), 'opt2': Optional(2)})", str(exp_dict))
+
+        self.assertEqual(exp_dict, '{"req1": 1, "req2": 2, "opt1": 1, "opt2": 2}')
+        self.assertEqual(exp_dict, '{"req1": 1, "req2": 2, "opt1": 1}')
+        self.assertEqual(exp_dict, '{"req1": 1, "req2": 2, "opt2": 2}')
+        self.assertEqual(exp_dict, '{"req1": 1, "req2": 2}')
+        self.assertEqual(exp_dict, b'{"req1": 1, "req2": 2}')
+
+        self.assertNotEqual(exp_dict, '{"req1": 1}')
+        self.assertNotEqual(exp_dict, '{"req1": 1, "opt1": 1}')
+        self.assertNotEqual(exp_dict, '{"req1": 1, "req2": 2, "opt3": 3}')
+        self.assertNotEqual(exp_dict, '{"req1": 1, "req2": 2, "req3": 3}')
+
+        self.fail_validate_with({}, self.DictStr({"req1": 1}),
+                                "[e_msg=not_dict_string] {} != DictStr({'req1': 1})",
+                                "[e_msg=not_dict_string]")
+
+        self.fail_validate_with('{}', self.DictStr({"req1": 1}),
+                                "[e_msg=missing_required_field: req1] {} != DictStr({'req1': 1})",
+                                "[e_msg=missing_required_field: req1]")
+
+        self.fail_validate_with('{"req1": 1}', self.DictStr({}),
+                                "[e_msg=unknown_field] [e_unsafe_msg=unknown_field: req1] {'req1': 1} != DictStr({})",
+                                "[e_msg=unknown_field]",
+                                )
+
+        self.fail_validate_with('{"req1": {}}', self.DictStr({"req1": {"req11": 1}}),
+                                "[e_path=$.req1] {} != {'req11': 1}",
+                                "[e_path=$.req1]")
+
     def test_dict_matcher__DictOf(self):
         exp_dict = self.DictOf(self.AnyStr(), self.AnyStr())
 

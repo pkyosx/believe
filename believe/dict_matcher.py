@@ -1,3 +1,4 @@
+import json
 from .internal import BelieveBase
 from .internal import validate
 
@@ -23,6 +24,14 @@ class Dict(BelieveBase):
                 validate(self.dict_obj[k], v, "%s.%s" % (e_path, k))
             else:
                 self.raise_validate_error(rhs, e_path=e_path, e_msg="unknown_field", e_unsafe_msg=f'unknown_field: {k}')
+
+class DictStr(Dict):
+    def validate(self, rhs, e_path=""):
+        try:
+            rhs_dict = json.loads(rhs)
+        except:
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="not_dict_string")
+        super().validate(rhs_dict, e_path)
 
 class DictOf(BelieveBase):
     def initialize(self, key, value, n_item=None, min_item=None, max_item=None):
