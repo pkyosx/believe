@@ -17,6 +17,8 @@ assert B.AnyIntStr() == "123"
 assert B.AnyUUID() == "732c0743-2638-47d5-902d-0daa3080348b"
 assert B.AnySHA1() == "b130c4b97d0640eaf3f45f7360a5b4dbbf561f58"
 assert B.AnyIPV4() == "1.2.3.4"
+assert B.AnyJsonStr({"foo": "bar"}) == '{"foo": "bar"}'
+assert B.AnyUrl("https://foo.com/bar?p1=1&p2=2") == "https://foo.com:443/bar?p2=2&p1=1"
 
 # Number Match
 assert B.AnyInt(min_value=1) == 1 # X >= 1
