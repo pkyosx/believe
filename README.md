@@ -1,5 +1,5 @@
 # Believe
-A python package for json validation. Useful for unit test or data validation for restful json body.
+A python package for json validation. Useful for unit test.
 
 # Installation
 ```
@@ -45,58 +45,4 @@ assert B.Not(B.OneOf("A")) == "B"
 # validate with error exception
 validator = B.Dict({"name": B.AnyInt()})
 B.validate(validator, {"name": "ken"})  # believe.error.ValidateError: [e_path=$.name] 'ken' != AnyInt()
-```
-
-# Common Usage (Unit test comparison)
-Use BelieveMixin on your test case to enable flexible comparison.
-```
-import unittest
-from believe import BelieveMixin
-
-class BelieveTestCase(unittest.TestCase, BelieveMixin):
-    def test_believe(self):
-        self.assertEquals(self.AnyStr(), "abc")
-        self.assertEquals(self.AnyIntStr(), "1")
-```
-
-# Advance Usage (flask)
-Save following code as flask_example.py
-```
-import believe as B
-
-from flask import Flask, request, current_app, jsonify
-
-app = Flask(__name__)
-
-@app.route('/', methods=['POST'])
-def hello_believe():
-    content = request.get_json()
-    json_validator = B.Dict({
-        "user_name": B.AnyStr(min_len=1, max_len=32),
-    })
-    try:
-        json_validator.validate(content)
-    except B.ValidateError as e:
-        current_app.logger.error(str(e))
-        # xss_safe_message won't echo request content to prevent xss via error message
-        return jsonify(message=e.xss_safe_message()), 400
-    return jsonify(f'{content["user_name"]} welcome back!')
-
-app.run(debug=1, host='0.0.0.0', port=80)
-```
-
-Install and run sample
-```
-$> pip install flask
-$> python flask_example.py
-```
-
-Test with invalid value
-```
-$> curl localhost -X POST -d '{"user_name": ""}' -H 'content-type: application/json'
-```
-
-Test with valid value
-```
-$> curl localhost -X POST -d '{"user_name": "123"}' -H 'content-type: application/json'
 ```

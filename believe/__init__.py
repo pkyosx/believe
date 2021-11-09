@@ -23,6 +23,8 @@ from .other_matcher import Any
 
 from .str_matcher import AnyStr
 from .str_matcher import AnyIntStr
+from .str_matcher import AnyJsonStr
+from .str_matcher import AnyUrl
 from .str_matcher import AnyUUID
 from .str_matcher import AnyIPV4
 from .str_matcher import AnySHA1
@@ -36,4 +38,4 @@ for c, cls in dict(locals()).items():
     except TypeError:
         pass
 
-__version__ = "1.0.9"
+__version__ = "1.0.10"

@@ -1,5 +1,6 @@
 import uuid
 import json
+from urllib.parse import urlparse
 
 from .internal import BelieveBase
 
@@ -77,3 +78,61 @@ class AnySHA1(BelieveBase):
             int(rhs, 16)
         except ValueError:
             self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_sha1")
+
+
+class AnyJsonStr(BelieveBase):
+    def initialize(self, obj):
+        self.obj = obj
+    def validate(self, rhs, e_path=""):
+        if not isinstance(rhs, str):
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="not_string")
+        try:
+            obj = json.loads(rhs)
+        except:
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="not_json_string")
+        if obj != self.obj:
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_json_string")
+
+
+class AnyUrl(BelieveBase):
+    def initialize(self, url_str):
+        self.url = urlparse(url_str)
+
+    def _normalize_query(self, query):
+        return "&".join(sorted(query.split("&")))
+
+    def _default_port(self, scheme):
+        if scheme == "http":
+            return 80
+        elif scheme == "https":
+            return 443
+
+    def validate(self, rhs, e_path=""):
+        if not isinstance(rhs, str):
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="not_string")
+
+        o = urlparse(rhs)
+
+        if self.url.scheme != o.scheme:
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_scheme")
+
+        default_port = self._default_port(self.url.scheme)
+
+        if self.url.username != o.username:
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_username")
+
+        if self.url.password != o.password:
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_password")
+
+        if self.url.hostname != o.hostname:
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_hostname")
+
+        if (self.url.port or default_port) != (o.port or default_port):
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_port")
+
+        if self.url.path != o.path:
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_path")
+
+        if self._normalize_query(self.url.query) != self._normalize_query(o.query):
+            self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_query")
+
