@@ -30,14 +30,13 @@ jobs:
         pip install .
     - name: Test with pytest
       run: |
-        pytest --junitxml=junit_report.xml --cov=believe --cov-report=xml tests
+        pytest --junitxml=junit_report.xml --cov=believe tests > pytest-coverage.txt
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v1
       if: always()
       with:
         files: junit_report.xml
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
+    - name: pytest-coverage-commentator
+      uses: coroo/pytest-coverage-commentator@v1.0.2
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: coverage.xml
+        pytest-coverage: pytest-coverage.txt
