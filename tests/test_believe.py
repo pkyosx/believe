@@ -21,8 +21,6 @@ class BaseClass:
 
 
 class TestNumberMatcher(BaseClass):
-    def test_force_failure(self):
-        assert 1 == 0
     def test_number_matcher__Almost_int(self):
         assert "Almost(1)" == str(B.Almost(1))
         assert 1 == B.Almost(0)
