@@ -31,4 +31,9 @@ jobs:
         pip install .
     - name: Test with pytest
       run: |
-        pytest
+        pytest --junitxml=junit_report.xml
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action/composite@v1
+      if: always()
+      with:
+        files: junit_report.xml
