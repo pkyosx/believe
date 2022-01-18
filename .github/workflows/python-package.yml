@@ -30,17 +30,14 @@ jobs:
         pip install .
     - name: Test with pytest
       run: |
-        pytest --junitxml=junit_report.xml --cov=believe tests
-    - name: Generate lcov coverage report from .coverage to lcov.info
-      run: |
-        coverage-lcov
-    - name: Export coverage report
-      uses: romeovs/lcov-reporter-action@v0.2.16
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        lcov-file: lcov.info
+        pytest --junitxml=junit_report.xml --cov=believe --cov-report=xml tests
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v1
       if: always()
       with:
         files: junit_report.xml
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path--to-lcov: coverage.xml
