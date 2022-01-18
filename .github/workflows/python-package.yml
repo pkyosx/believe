@@ -36,6 +36,7 @@ jobs:
         coverage-lcov
     - name: Export coverage report
       uses: romeovs/lcov-reporter-action@v0.2.16
+      if: ${{ matrix.python-version == "3.9" }}
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         lcov-file: lcov.info
