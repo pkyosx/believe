@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -26,12 +26,18 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install pytest pytest-cov coverage-lcov
         pip install .
     - name: Test with pytest
       run: |
-        pytest --junitxml=junit_report.xml
+        pytest --junitxml=junit_report.xml --cov=believe tests
+    - name: Generate lcov coverage report from .coverage to lcov.info
+      run: |
+        coverage-lcov
+    - name: Export coverage report
+      uses: romeovs/lcov-reporter-action@v0.2.16
+      with:
+        lcov-file: lcov.info
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v1
       if: always()
