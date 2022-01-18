@@ -37,6 +37,7 @@ jobs:
     - name: Export coverage report
       uses: romeovs/lcov-reporter-action@v0.2.16
       with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         lcov-file: lcov.info
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v1
