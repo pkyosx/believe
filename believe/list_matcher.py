@@ -1,28 +1,35 @@
+from typing import Any, List
+
 from .internal import BelieveBase
 from .internal import validate
+from .internal import no_check
 
 
 class OneOf(BelieveBase):
-    def initialize(self, *candidates):
-        self.candidates = candidates
+    def __init__(self, *candidates: Any):
+        super().__init__(*candidates)
+        self.__candidates = candidates
 
-    def validate(self, rhs, e_path=""):
-        for i in self.candidates:
+    def validate(self, rhs: Any, e_path: str = ""):
+        for i in self.__candidates:
             if i == rhs:
                 return
         self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_argument")
 
 
 class AnyOrder(BelieveBase):
-    def initialize(self, list_obj):
+    def __init__(self, list_obj: List):
         assert isinstance(list_obj, list)
 
-        self.list_obj = list_obj
+        super().__init__(list_obj)
+        self.__list_obj = list_obj
 
-    def validate(self, rhs, e_path=""):
-        if len(rhs) != len(self.list_obj):
+    def validate(self, rhs: List[Any], e_path: str = ""):
+        if not isinstance(rhs, list):
+            self.raise_validate_error(rhs, e_path=e_path)
+        if len(rhs) != len(self.__list_obj):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="different_length")
-        list_obj = self.list_obj[:]
+        list_obj = self.__list_obj[:]
         for idx, i in enumerate(rhs):
             if not i in list_obj:
                 self.raise_validate_error(rhs, e_path=e_path, e_msg=f'item_not_found_at_index: {idx}')
@@ -30,23 +37,29 @@ class AnyOrder(BelieveBase):
 
 
 class ListOf(BelieveBase):
-    def initialize(self, one_item, n_item=None, min_item=None, max_item=None):
-        self.one_item = one_item
-        self.n_item = n_item
-        self.min_item = min_item
-        self.max_item = max_item
+    def __init__(self, one_item: Any, n_item: int = no_check, min_item: int = no_check, max_item: int = no_check):
+        assert n_item == no_check or isinstance(n_item, int)
+        assert min_item == no_check or isinstance(min_item, int)
+        assert max_item == no_check or isinstance(max_item, int)
 
-    def validate(self, rhs, e_path=""):
+        super().__init__(one_item, n_item=n_item, min_item=min_item, max_item=max_item)
+
+        self.__one_item = one_item
+        self.__n_item = n_item
+        self.__min_item = min_item
+        self.__max_item = max_item
+
+    def validate(self, rhs: List, e_path: str = ""):
         if not isinstance(rhs, list):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="not_list")
-        if self.n_item is not None:
-            if not len(rhs) == self.n_item:
-                self.raise_validate_error(rhs, e_path=e_path, e_msg=f'mismatch_item_count: {len(rhs)} != {self.n_item}')
-        if self.min_item is not None:
-            if len(rhs) < self.min_item:
-                self.raise_validate_error(rhs, e_path=e_path, e_msg=f'too_few_items: {len(rhs)} < {self.min_item}')
-        if self.max_item is not None:
-            if len(rhs) > self.max_item:
-                self.raise_validate_error(rhs, e_path=e_path, e_msg=f'too_many_items: {len(rhs)} > {self.max_item}')
+        if self.__n_item != no_check:
+            if not len(rhs) == self.__n_item:
+                self.raise_validate_error(rhs, e_path=e_path, e_msg=f'mismatch_item_count: {len(rhs)} != {self.__n_item}')
+        if self.__min_item != no_check:
+            if len(rhs) < self.__min_item:
+                self.raise_validate_error(rhs, e_path=e_path, e_msg=f'too_few_items: {len(rhs)} < {self.__min_item}')
+        if self.__max_item != no_check:
+            if len(rhs) > self.__max_item:
+                self.raise_validate_error(rhs, e_path=e_path, e_msg=f'too_many_items: {len(rhs)} > {self.__max_item}')
         for idx, val in enumerate(rhs):
-            validate(self.one_item, val, "%s.%s" % (e_path, str(idx)))
+            validate(self.__one_item, val, "%s.%s" % (e_path, str(idx)))

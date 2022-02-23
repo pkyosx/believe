@@ -325,42 +325,6 @@ class TestDictMatcher(BaseClass):
                                 "[e_path=$.req1] {} != {'req11': 1}",
                                 "[e_path=$.req1]")
 
-    def test_dict_matcher__DictStr(self):
-        exp_dict = B.DictStr({"req1": 1,
-                                 "req2": 2,
-                                 "opt1": B.Optional(1),
-                                 "opt2": B.Optional(2)})
-
-        assert "DictStr({'req1': 1, 'req2': 2, 'opt1': Optional(1), 'opt2': Optional(2)})" == str(exp_dict)
-
-        assert exp_dict == '{"req1": 1, "req2": 2, "opt1": 1, "opt2": 2}'
-        assert exp_dict == '{"req1": 1, "req2": 2, "opt1": 1}'
-        assert exp_dict == '{"req1": 1, "req2": 2, "opt2": 2}'
-        assert exp_dict == '{"req1": 1, "req2": 2}'
-        assert exp_dict == b'{"req1": 1, "req2": 2}'
-
-        assert exp_dict != '{"req1": 1}'
-        assert exp_dict != '{"req1": 1, "opt1": 1}'
-        assert exp_dict != '{"req1": 1, "req2": 2, "opt3": 3}'
-        assert exp_dict != '{"req1": 1, "req2": 2, "req3": 3}'
-
-        self.fail_validate_with({}, B.DictStr({"req1": 1}),
-                                "[e_msg=not_dict_string] {} != DictStr({'req1': 1})",
-                                "[e_msg=not_dict_string]")
-
-        self.fail_validate_with('{}', B.DictStr({"req1": 1}),
-                                "[e_msg=missing_required_field: req1] {} != DictStr({'req1': 1})",
-                                "[e_msg=missing_required_field: req1]")
-
-        self.fail_validate_with('{"req1": 1}', B.DictStr({}),
-                                "[e_msg=unknown_field] [e_unsafe_msg=unknown_field: req1] {'req1': 1} != DictStr({})",
-                                "[e_msg=unknown_field]",
-                                )
-
-        self.fail_validate_with('{"req1": {}}', B.DictStr({"req1": {"req11": 1}}),
-                                "[e_path=$.req1] {} != {'req11': 1}",
-                                "[e_path=$.req1]")
-
     def test_dict_matcher__DictOf(self):
         exp_dict = B.DictOf(B.AnyStr(), B.AnyStr())
 

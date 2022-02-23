@@ -1,11 +1,9 @@
 from .error import ValidateError
-from .error import ImplementationError
 
 from .internal import BelieveBase
 from .internal import validate
 
 from .dict_matcher import Dict
-from .dict_matcher import DictStr
 from .dict_matcher import DictOf
 from .dict_matcher import Optional
 
@@ -38,4 +36,4 @@ for c, cls in dict(locals()).items():
     except TypeError:
         pass
 
-__version__ = "1.0.10"
+__version__ = "1.0.11"
