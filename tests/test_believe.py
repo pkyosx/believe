@@ -27,6 +27,7 @@ class TestNumberMatcher(BaseClass):
         assert 1 == B.Almost(2)
         assert 1 == B.Almost(3)
         assert 1 != B.Almost(5)
+        assert None != B.Almost(0)
 
         self.fail_validate_with(10, B.Almost(1),
                                 "[e_msg=not_in_range] 10 != Almost(1)",
@@ -88,6 +89,7 @@ class TestStrMatcher(BaseClass):
         assert '192.168.1.1' ==  B.AnyIPV4()
         assert '127.0.0' != B.AnyIPV4()
         assert '0.0.0.x' != B.AnyIPV4()
+        assert "256.1.1.1" != B.AnyIPV4()
         assert 12345 != B.AnyIPV4()
 
         self.fail_validate_with(12345, B.AnyIPV4(),
@@ -99,6 +101,7 @@ class TestStrMatcher(BaseClass):
         assert self.gen_sha1() == B.AnySHA1()
         assert '123' != B.AnySHA1()
         assert 123 != B.AnySHA1()
+        assert "Z" + self.gen_sha1()[1:] != B.AnySHA1()
 
         self.fail_validate_with('123', B.AnySHA1(),
                                 "[e_msg=invalid_sha1] '123' != AnySHA1()",
@@ -109,7 +112,7 @@ class TestStrMatcher(BaseClass):
         assert str(uuid.uuid4()) == B.AnyUUID()
         assert None != B.AnyUUID()
         assert 10 != B.AnyUUID()
-        assert uuid.uuid4().bytes_le.hex() != B.AnyUUID()
+        assert "abc" != B.AnyUUID()
 
         self.fail_validate_with(10, B.AnyUUID(),
                                 "[e_msg=invalid_uuid] 10 != AnyUUID()",
@@ -180,6 +183,7 @@ class TestStrMatcher(BaseClass):
 
         # test default port
         assert "https://example.com:443" == B.AnyUrl("https://example.com")
+        assert "http://example.com:80" == B.AnyUrl("http://example.com")
 
         # test query
         assert "https://example.com/path?q1=1&q2=2" == B.AnyUrl("https://example.com/path?q2=2&q1=1")
@@ -233,6 +237,7 @@ class TestListMatcher(BaseClass):
         assert [1, 1, 2] == B.AnyOrder([2, 1, 1])
         assert [1, 2, 3] == B.AnyOrder([2, 1, 3])
         assert [1, 2] != B.AnyOrder([2, 1, 3])
+        assert [1, 2, 3] != B.AnyOrder([2, 1])
 
         self.fail_validate_with([1, 2], B.AnyOrder([2, 1, 3]),
                                 "[e_msg=different_length] [1, 2] != AnyOrder([2, 1, 3])",
@@ -301,6 +306,7 @@ class TestDictMatcher(BaseClass):
         assert exp_dict == {"req1": 1, "req2": 2, "opt2": 2}
         assert exp_dict == {"req1": 1, "req2": 2}
 
+        assert exp_dict != None
         assert exp_dict != {"req1": 1}
         assert exp_dict != {"req1": 1, "opt1": 1}
         assert exp_dict != {"req1": 1, "req2": 2, "opt3": 3}
@@ -316,42 +322,6 @@ class TestDictMatcher(BaseClass):
                                 )
 
         self.fail_validate_with({"req1": {}}, B.Dict({"req1": {"req11": 1}}),
-                                "[e_path=$.req1] {} != {'req11': 1}",
-                                "[e_path=$.req1]")
-
-    def test_dict_matcher__DictStr(self):
-        exp_dict = B.DictStr({"req1": 1,
-                                 "req2": 2,
-                                 "opt1": B.Optional(1),
-                                 "opt2": B.Optional(2)})
-
-        assert "DictStr({'req1': 1, 'req2': 2, 'opt1': Optional(1), 'opt2': Optional(2)})" == str(exp_dict)
-
-        assert exp_dict == '{"req1": 1, "req2": 2, "opt1": 1, "opt2": 2}'
-        assert exp_dict == '{"req1": 1, "req2": 2, "opt1": 1}'
-        assert exp_dict == '{"req1": 1, "req2": 2, "opt2": 2}'
-        assert exp_dict == '{"req1": 1, "req2": 2}'
-        assert exp_dict == b'{"req1": 1, "req2": 2}'
-
-        assert exp_dict != '{"req1": 1}'
-        assert exp_dict != '{"req1": 1, "opt1": 1}'
-        assert exp_dict != '{"req1": 1, "req2": 2, "opt3": 3}'
-        assert exp_dict != '{"req1": 1, "req2": 2, "req3": 3}'
-
-        self.fail_validate_with({}, B.DictStr({"req1": 1}),
-                                "[e_msg=not_dict_string] {} != DictStr({'req1': 1})",
-                                "[e_msg=not_dict_string]")
-
-        self.fail_validate_with('{}', B.DictStr({"req1": 1}),
-                                "[e_msg=missing_required_field: req1] {} != DictStr({'req1': 1})",
-                                "[e_msg=missing_required_field: req1]")
-
-        self.fail_validate_with('{"req1": 1}', B.DictStr({}),
-                                "[e_msg=unknown_field] [e_unsafe_msg=unknown_field: req1] {'req1': 1} != DictStr({})",
-                                "[e_msg=unknown_field]",
-                                )
-
-        self.fail_validate_with('{"req1": {}}', B.DictStr({"req1": {"req11": 1}}),
                                 "[e_path=$.req1] {} != {'req11': 1}",
                                 "[e_path=$.req1]")
 
