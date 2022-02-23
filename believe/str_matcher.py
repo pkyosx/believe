@@ -3,13 +3,13 @@ import json
 from typing import Dict, List, Union
 from urllib.parse import urlparse
 
-from .internal import BelieveBase, no_check
+from .internal import BelieveBase, NO_CHECK
 
 
 class AnyStr(BelieveBase):
-    def __init__(self, min_len: int = no_check, max_len: int = no_check):
-        assert min_len == no_check or isinstance(min_len, int)
-        assert max_len == no_check or isinstance(max_len, int)
+    def __init__(self, min_len: int = NO_CHECK, max_len: int = NO_CHECK):
+        assert min_len == NO_CHECK or isinstance(min_len, int)
+        assert max_len == NO_CHECK or isinstance(max_len, int)
 
         super().__init__(min_len=min_len, max_len=max_len)
         self.__min_len = min_len
@@ -18,9 +18,9 @@ class AnyStr(BelieveBase):
     def validate(self, rhs: str, e_path: str = ""):
         if not isinstance(rhs, str):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="not_string")
-        if self.__min_len != no_check and len(rhs) < self.__min_len:
+        if self.__min_len != NO_CHECK and len(rhs) < self.__min_len:
             self.raise_validate_error(rhs, e_path=e_path, e_msg=f'string_too_short: {len(rhs)} < {self.__min_len}')
-        if self.__max_len != no_check and len(rhs) > self.__max_len:
+        if self.__max_len != NO_CHECK and len(rhs) > self.__max_len:
             self.raise_validate_error(rhs, e_path=e_path, e_msg=f'string_too_long: {len(rhs)} > {self.__max_len}')
 
 

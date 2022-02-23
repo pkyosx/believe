@@ -3,8 +3,9 @@ import inspect
 from typing import Any
 from .error import ValidateError
 
-no_check = Ellipsis
-use_default = Ellipsis
+
+# We use Ellipsis to differentiate if caller assign non-default value for kwargs
+NO_CHECK = USE_DEFAULT = Ellipsis
 
 class BelieveBase(abc.ABC):
     def __init__(self, *args: Any, **kwargs: Any):
@@ -35,7 +36,7 @@ class BelieveBase(abc.ABC):
     def init_arg_str(self, *args: Any, **kwargs: Any):
         list_of_arg = list(args)
         for k, v in kwargs.items():
-            if v != no_check:
+            if v != Ellipsis: # only show overwritten kwargs
                 list_of_arg.append("%s=%s" % (k, v))
         return ", ".join([self.to_str(i) for i in list_of_arg])
 
