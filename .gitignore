@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# customized
+.direnv
+.envrc
+junit_report.xml
+lcov.info

@@ -7,7 +7,7 @@ from .internal import BelieveBase, NO_CHECK
 
 
 class AnyStr(BelieveBase):
-    def __init__(self, min_len: int = NO_CHECK, max_len: int = NO_CHECK):
+    def __init__(self, min_len: int = NO_CHECK, max_len: int = NO_CHECK) -> None:
         assert min_len == NO_CHECK or isinstance(min_len, int)
         assert max_len == NO_CHECK or isinstance(max_len, int)
 
@@ -15,17 +15,25 @@ class AnyStr(BelieveBase):
         self.__min_len = min_len
         self.__max_len = max_len
 
-    def validate(self, rhs: str, e_path: str = ""):
+    def validate(self, rhs: str, e_path: str = "") -> None:
         if not isinstance(rhs, str):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="not_string")
         if self.__min_len != NO_CHECK and len(rhs) < self.__min_len:
-            self.raise_validate_error(rhs, e_path=e_path, e_msg=f'string_too_short: {len(rhs)} < {self.__min_len}')
+            self.raise_validate_error(
+                rhs,
+                e_path=e_path,
+                e_msg=f"string_too_short: {len(rhs)} < {self.__min_len}",
+            )
         if self.__max_len != NO_CHECK and len(rhs) > self.__max_len:
-            self.raise_validate_error(rhs, e_path=e_path, e_msg=f'string_too_long: {len(rhs)} > {self.__max_len}')
+            self.raise_validate_error(
+                rhs,
+                e_path=e_path,
+                e_msg=f"string_too_long: {len(rhs)} > {self.__max_len}",
+            )
 
 
 class AnyIntStr(BelieveBase):
-    def validate(self, rhs: str, e_path: str = ""):
+    def validate(self, rhs: str, e_path: str = "") -> None:
         if not isinstance(rhs, str):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="not_string")
 
@@ -36,7 +44,7 @@ class AnyIntStr(BelieveBase):
 
 
 class AnyUUID(BelieveBase):
-    def validate(self, rhs: str, e_path: str = ""):
+    def validate(self, rhs: str, e_path: str = "") -> None:
         if not isinstance(rhs, str) or len(rhs) != 36:
             self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_uuid")
         try:
@@ -46,10 +54,10 @@ class AnyUUID(BelieveBase):
 
 
 class AnyIPV4(BelieveBase):
-    def validate(self, rhs: str, e_path: str = ""):
+    def validate(self, rhs: str, e_path: str = "") -> None:
         if not isinstance(rhs, str):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_ipv4")
-        tokens = rhs.split('.')
+        tokens = rhs.split(".")
         if len(tokens) != 4:
             self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_ipv4")
         for token in tokens:
@@ -62,7 +70,7 @@ class AnyIPV4(BelieveBase):
 
 
 class AnySHA1(BelieveBase):
-    def validate(self, rhs: str, e_path: str = ""):
+    def validate(self, rhs: str, e_path: str = "") -> None:
         if not isinstance(rhs, str):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="invalid_sha1")
         if len(rhs) != 40:
@@ -74,12 +82,12 @@ class AnySHA1(BelieveBase):
 
 
 class AnyJsonStr(BelieveBase):
-    def __init__(self, json_obj: Union[Dict, List]):
+    def __init__(self, json_obj: Union[Dict, List]) -> None:
         assert isinstance(json_obj, (dict, list))
         super().__init__(json_obj)
         self.__json_obj = json_obj
 
-    def validate(self, rhs: str, e_path: str = ""):
+    def validate(self, rhs: str, e_path: str = "") -> None:
         if not isinstance(rhs, str):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="not_string")
         try:
@@ -91,20 +99,20 @@ class AnyJsonStr(BelieveBase):
 
 
 class AnyUrl(BelieveBase):
-    def __init__(self, url: str):
+    def __init__(self, url: str) -> None:
         super().__init__(url)
         self.__parsed_url = urlparse(url)
 
-    def _normalize_query(self, query: str):
+    def _normalize_query(self, query: str) -> str:
         return "&".join(sorted(query.split("&")))
 
-    def _default_port(self, scheme: str):
+    def _default_port(self, scheme: str) -> int:
         if scheme == "http":
             return 80
         elif scheme == "https":
             return 443
 
-    def validate(self, rhs: str, e_path: str = ""):
+    def validate(self, rhs: str, e_path: str = "") -> None:
         if not isinstance(rhs, str):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="not_string")
 
@@ -130,6 +138,7 @@ class AnyUrl(BelieveBase):
         if self.__parsed_url.path != o.path:
             self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_path")
 
-        if self._normalize_query(self.__parsed_url.query) != self._normalize_query(o.query):
+        if self._normalize_query(self.__parsed_url.query) != self._normalize_query(
+            o.query
+        ):
             self.raise_validate_error(rhs, e_path=e_path, e_msg="mismatch_query")
-

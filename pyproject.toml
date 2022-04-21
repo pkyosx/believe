@@ -1,0 +1,38 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[project]
+name = "believe"
+authors = [{name = "Seth Wang", email = "pkyosx@gmail.com"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+            "License :: OSI Approved :: MIT License",
+            "Operating System :: OS Independent",
+            "Programming Language :: Python :: 3",
+            "Programming Language :: Python :: 3.8",
+            "Programming Language :: Python :: 3.9",
+            "Programming Language :: Python :: 3.10",
+        ]
+description = "A easy to use validator for json content"
+description-file = "README.md"
+requires-python = '>=3.8'
+dynamic = ["version"]
+keywords = ["json", "validate", "validator"]
+
+[project.urls]
+Home = "https://github.com/pkyosx/believe"
+
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    "coverage-lcov",
+]
+
+[tool.isort]
+profile = "black"
+src_paths = ["believe"]
+force_single_line = true
