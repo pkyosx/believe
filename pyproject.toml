@@ -16,7 +16,6 @@ classifiers = [
             "Programming Language :: Python :: 3.10",
         ]
 description = "A easy to use validator for json content"
-description-file = "README.md"
 requires-python = '>=3.8'
 dynamic = ["version"]
 keywords = ["json", "validate", "validator"]
@@ -30,6 +29,9 @@ test = [
     "pytest",
     "pytest-cov",
     "coverage-lcov",
+]
+publish = [
+    "flit"
 ]
 
 [tool.isort]
