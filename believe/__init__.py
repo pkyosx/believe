@@ -28,7 +28,10 @@ from .str_matcher import AnyIPV4
 from .str_matcher import AnySHA1
 
 # Put all Matcher into BelieveMixin
-class BelieveMixin(object): pass
+class BelieveMixin(object):
+    pass
+
+
 for c, cls in dict(locals()).items():
     try:
         if issubclass(cls, BelieveBase) and cls != BelieveBase:
@@ -36,4 +39,4 @@ for c, cls in dict(locals()).items():
     except TypeError:
         pass
 
-__version__ = "1.0.11"
+__version__ = "1.0.12"
