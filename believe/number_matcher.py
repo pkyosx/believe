@@ -1,6 +1,8 @@
 from typing import Union
 
-from .internal import BelieveBase, NO_CHECK, USE_DEFAULT
+from .internal import NO_CHECK
+from .internal import USE_DEFAULT
+from .internal import BelieveBase
 
 
 class Almost(BelieveBase):

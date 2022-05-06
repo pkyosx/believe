@@ -1,7 +1,8 @@
 import typing
+
+from .internal import NO_CHECK
 from .internal import BelieveBase
 from .internal import validate
-from .internal import NO_CHECK
 
 
 class Dict(BelieveBase):

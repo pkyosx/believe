@@ -5,42 +5,41 @@ name: Python package
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e ".[test]"
-    - name: Test with pytest
-      run: |
-        pytest --junitxml=junit_report.xml --cov=believe tests
-    - name: Generate lcov coverage report from .coverage to lcov.info
-      run: |
-        coverage-lcov
-    - name: Export coverage report
-      uses: romeovs/lcov-reporter-action@v0.2.19
-      if: matrix.python-version == '3.9'
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        lcov-file: lcov.info
-    - name: Publish Unit Test Results
-      uses: EnricoMi/publish-unit-test-result-action/composite@v1
-      if: always()
-      with:
-        files: junit_report.xml
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[test]"
+      - name: Test with pytest
+        run: |
+          pytest --junitxml=junit_report.xml --cov=believe tests
+      - name: Generate lcov coverage report from .coverage to lcov.info
+        run: |
+          coverage-lcov
+      - name: Export coverage report
+        uses: romeovs/lcov-reporter-action@v0.2.19
+        if: matrix.python-version == '3.9'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: lcov.info
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v1
+        if: always()
+        with:
+          files: junit_report.xml
