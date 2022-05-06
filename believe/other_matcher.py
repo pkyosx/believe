@@ -1,5 +1,6 @@
-from .internal import BelieveBase
 from typing import Any
+
+from .internal import BelieveBase
 
 
 class Nullable(BelieveBase):

@@ -1,9 +1,12 @@
-import uuid
 import json
-from typing import Dict, List, Union
+import uuid
+from typing import Dict
+from typing import List
+from typing import Union
 from urllib.parse import urlparse
 
-from .internal import BelieveBase, NO_CHECK
+from .internal import NO_CHECK
+from .internal import BelieveBase
 
 
 class AnyStr(BelieveBase):

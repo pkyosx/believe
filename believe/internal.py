@@ -1,8 +1,8 @@
 import abc
 import inspect
 from typing import Any
-from .error import ValidateError
 
+from .error import ValidateError
 
 # We use Ellipsis to differentiate if caller assign non-default value for kwargs
 NO_CHECK = USE_DEFAULT = Ellipsis

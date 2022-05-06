@@ -1,8 +1,9 @@
-from typing import Any, List
+from typing import Any
+from typing import List
 
+from .internal import NO_CHECK
 from .internal import BelieveBase
 from .internal import validate
-from .internal import NO_CHECK
 
 
 class OneOf(BelieveBase):
