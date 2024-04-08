@@ -28,6 +28,7 @@ Home = "https://github.com/pkyosx/believe"
 
 [project.optional-dependencies]
 test = [
+    "coverage<7.0.0",
     "pytest",
     "pytest-cov",
     "coverage-lcov",
